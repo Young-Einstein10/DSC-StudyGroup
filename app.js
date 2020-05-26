@@ -19,6 +19,8 @@ const auth = firebase.auth();
 // Reference to database method of Firebase
 const database = firebase.firestore();
 
+const createPost = document.querySelector(".createPost");
+
 // Access the modal element
 const modal = document.getElementById("modal");
 
@@ -60,54 +62,22 @@ window.addEventListener("click", (event) => {
 });
 
 let uid;
-
-const data = [
-  {
-    id: 1,
-    title: "First Post",
-    body:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati rerum ab numquam beatae porro ipsa reprehenderit alias. Voluptas voluptatibus ea ad mollitia recusandae voluptatum alias pariatur fugiat delectus veritatis Doloremque.",
-    author: "John Blake",
-    createdOn: new Date(),
-  },
-  {
-    id: 2,
-    title: "Second Post",
-    body:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati rerum ab numquam beatae porro ipsa reprehenderit alias. Voluptas voluptatibus ea ad mollitia recusandae voluptatum alias pariatur fugiat delectus veritatis Doloremque.",
-    author: "John Blake",
-    createdOn: new Date(),
-  },
-  {
-    id: 3,
-    title: "Third Post",
-    body:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati rerum ab numquam beatae porro ipsa reprehenderit alias. Voluptas voluptatibus ea ad mollitia recusandae voluptatum alias pariatur fugiat delectus veritatis Doloremque.",
-    author: "John Blake",
-    createdOn: new Date(),
-  },
-  {
-    id: 4,
-    title: "Fourth Post",
-    body:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati rerum ab numquam beatae porro ipsa reprehenderit alias. Voluptas voluptatibus ea ad mollitia recusandae voluptatum alias pariatur fugiat delectus veritatis Doloremque.",
-    author: "John Blake",
-    createdOn: new Date(),
-  },
-];
+let userProfile = {};
 
 const addPoststoUI = (posts) => {
   const postContainer = document.getElementById("posts");
   posts.forEach((post) => {
     const article = document.createElement("article");
-
+    article.className = "article";
+    article.dataset.name = post.id;
+    article.setAttribute("authorId", post.authorId);
     article.innerHTML = `
       <p class="article-details">
         <span>
-          <em>${post.author}</em>
+          <em>${post.authorFirstname} ${post.authorLastname}</em>
         </span>
         <span>
-          ${post.createdOn}
+          ${post.createdOn.seconds}
         </span>
       </p>
       <h1 className="title">${post.title}</h1>
@@ -127,9 +97,11 @@ auth.onAuthStateChanged((user) => {
     // Everything inside here happens if user is signed in
     console.log("Uer is Signed In");
     uid = user.uid;
+    userProfile.photoURL = user.photoURL;
+    // console.log(user);
     // Hide Modal
     modal.style.display = "none";
-
+    // console.log(user.displayName, user.photoURL);
     // Hides or shows elements depending on if user is signed in
     hideWhenSignedIn.forEach((eachItem) => {
       eachItem.classList.add("hide");
@@ -138,33 +110,34 @@ auth.onAuthStateChanged((user) => {
       eachItem.classList.remove("hide");
     });
 
-    // Get Data Posted By User from Firebase
-    // database
-    //   .collection("tests")
-    //   .doc(uid)
-    //   .collection("user-tests")
-    //   .onSnapshot((snapshot) => {
-    //     snapshot.forEach((element) => {
-    //       arr.push({
-    //         // Grab Document ID
-    //         id: element.id,
-    //         ...element.data(),
-    //       });
-    //       console.log(element.id, " => ", element.data());
-    //       console.log(arr);
-    //     });
-    //   });
-
-    // Get All Data Posted By User(s)
-    database.collection("tests").onSnapshot((snapshot) => {
-      console.log(snapshot.get());
+    // Get User Details from users collection
+    database.collection("users").onSnapshot((snapshot) => {
       snapshot.forEach((element) => {
-        console.log(element);
-        console.log(element.id, " => ", element.data());
+        // If Doc ID equals user ID, set userProfile
+        if (element.id === uid) {
+          userProfile.firstName = element.data().firstName;
+          userProfile.lastName = element.data().lastName;
+        }
       });
+      console.log(userProfile);
     });
 
-    // addPoststoUI(data);
+    // Get Data Posted By User from Firebase
+    database.collection("tweets").onSnapshot((snapshot) => {
+      snapshot.forEach((element) => {
+        // console.log(element.id, " => ", element.data());
+        arr.push({
+          id: element.id,
+          ...element.data(),
+        });
+      });
+      console.log(arr);
+    });
+
+    // Mimic Async Request
+    setTimeout(() => {
+      addPoststoUI(arr);
+    }, 1000);
   } else {
     // Everything inside here happens if user is not signed in
     console.log("not signed in");
@@ -286,14 +259,20 @@ createUserForm.addEventListener("submit", (event) => {
   loading("show");
   // Grab values from form
   const displayName = document.getElementById("create-user-display-name").value;
+  const firstName = document.getElementById("create-user-first-name").value;
+  const lastName = document.getElementById("create-user-last-name").value;
   const email = document.getElementById("create-user-email").value;
   const password = document.getElementById("create-user-password").value;
   // Send values to Firebase
   auth
     .createUserWithEmailAndPassword(email, password)
-    .then(() => {
+    .then((res) => {
       auth.currentUser.updateProfile({
         displayName: displayName,
+      });
+      database.collection("users").doc(res.user.uid).set({
+        firstName,
+        lastName,
       });
       createUserForm.reset();
     })
@@ -347,16 +326,34 @@ forgotPasswordForm.addEventListener("submit", (event) => {
 createPostForm.addEventListener("submit", (event) => {
   event.preventDefault();
   // Send value to Firebase
+  // database
+  //   .collection("tests")
+  //   .doc(uid)
+  //   .collection("user-tests")
+  //   .add({
+  //     title: "First Test",
+  //     body: "Body of Teest",
+  //     createdOn: new Date(),
+  //   })
+  //   .then(function (docRef) {
+  //     console.log("Document written with ID: ", docRef.id);
+  //   })
+  //   .catch(function (error) {
+  //     console.error("Error adding document: ", error);
+  //   });
+
   database
-    .collection("tests")
-    .doc(uid)
-    .collection("user-tests")
+    .collection("tweets")
     .add({
-      title: "First Test",
-      body: "Body of Teest",
+      title: document.getElementById("title").value,
+      body: document.getElementById("body").value,
+      authorFirstname: userProfile.firstName,
+      authorLastname: userProfile.lastName,
+      authorId: uid,
       createdOn: new Date(),
     })
     .then(function (docRef) {
+      console.log(docRef);
       console.log("Document written with ID: ", docRef.id);
     })
     .catch(function (error) {
@@ -365,4 +362,28 @@ createPostForm.addEventListener("submit", (event) => {
 
   // reset form
   createPostForm.reset();
+  showLatestPosts();
 });
+
+createPost.addEventListener("click", showCreatePost);
+
+const latestPosts = document.querySelector(".latest-posts");
+const addPostForm = document.querySelector(".add-post-form");
+
+function showCreatePost() {
+  if (latestPosts.style.display === "block") {
+    displayAddPostForm();
+  } else {
+    showLatestPosts();
+  }
+}
+
+function displayAddPostForm() {
+  latestPosts.style.display = "none";
+  addPostForm.style.display = "block";
+}
+
+function showLatestPosts() {
+  latestPosts.style.display = "block";
+  addPostForm.style.display = "none";
+}

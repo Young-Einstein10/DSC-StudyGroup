@@ -16,14 +16,12 @@
 <body>
   <main>
     <!-- Header -->
-    <div id="header">
+    <nav id="header">
       <div>
-        <img src="https://www.educative.io/udata/kvy8DD1x1RW/authentication-boilerplate-logo.jpg" alt="logo" id="logo">
+        <p>LOGO</p>
       </div>
 
-      <div></div>
-
-      <div class="hide-when-signed-in header-buttons-grid">
+      <div class="nav-items hide-when-signed-in">
         <div>
           <button id="sign-in-link-header" class="auth gray-button" auth="show-sign-in-form">Sign In</button>
         </div>
@@ -34,16 +32,16 @@
         </div>
       </div>
 
-      <div class="hide-when-signed-out">
+      <div class="nav-items hide-when-signed-out">  
+        <button class="createPost">Create Post</button>    
         <button class="auth" auth="sign-out">sign out</button>
+        <span class="photoURL"></span>
       </div>
-    </div>
+    </nav>
 
     <!-- Hero Banner -->
     <div class="hide-when-signed-in">
-      <img src="https://www.educative.io/udata/GDpzwxlVjl2/hero-banner-desktop.jpg" alt="hero banner" id="hero-banner-desktop">
-      <img src="https://www.educative.io/udata/nWG9YbPorB4/hero-banner-tablet.jpg" alt="hero banner" id="hero-banner-tablet">
-      <img src="https://www.educative.io/udata/4Pb8eYMaPvn/hero-banner-phone.jpg" alt="hero banner" id="hero-banner-phone">
+
     </div>
 
     <!-- Dashboard -->
@@ -67,7 +65,7 @@
       <div class="latest-posts">
         <h1>Latest Posts</h1>
         <div id="posts">
-          <article className="article">
+          <!-- <article className="article">
             <p class="article-details">
               <span>
                 <em>John Blake</em>
@@ -83,7 +81,7 @@
               quaerat ullam nobis suscipit, fugiat adipisci ut rerum, velit
               dolorum minus modi
             </p>
-          </article>
+          </article> -->
         </div>
       </div>
     </section>
@@ -121,6 +119,8 @@
           <form id="create-user-form">
             <div id="create-user-inputs">
               <input type="text" id="create-user-display-name" placeholder="Display Name" required autocomplete="off">
+              <input type="text" id="create-user-first-name" placeholder="First Name" required autocomplete="off">
+              <input type="text" id="create-user-last-name" placeholder="Last Name" required autocomplete="off">
               <input type="email" id="create-user-email" placeholder="Email" required autocomplete="off">
               <input type="password" id="create-user-password" placeholder="Password" required autocomplete="off">
             </div>
