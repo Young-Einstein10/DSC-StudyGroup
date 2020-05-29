@@ -16,16 +16,16 @@ h1 {
   font-family: cursive;
 }
 
+button {
+  background: #316fea;
+}
+
 img {
   width: 100%;
 }
 
 .auth {
   cursor: pointer;
-}
-
-#header > div > button {
-  margin-top: 10px;
 }
 
 #header {
@@ -135,6 +135,18 @@ img {
 }
 
 #modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+#article-modal {
   display: none;
   position: fixed;
   z-index: 1;
@@ -319,81 +331,9 @@ input:focus {
   padding: 10px;
 }
 
-/* Loading visual Lesson */
-#loading-outer-container {
-  margin: 40px auto;
-}
-
-#loading-inner-container {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  left: 0;
-  right: 0;
-  margin: auto;
-  top: 20%;
-}
-
-#loadspin {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  margin: 0 auto;
-}
-
-#circle2 {
-  background-color: #39b1c6;
-}
-
-#circle1 {
-  background-color: #ec3f8c;
-}
-
-#circle1,
-#circle2 {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  opacity: 0.6;
-  position: absolute;
-  top: 0;
-  left: 0;
-  -webkit-animation: bounce 2s infinite ease-in-out;
-  animation: bounce 2s infinite ease-in-out;
-}
-
-#circle2 {
-  -webkit-animation-delay: -1s;
-  animation-delay: -1s;
-}
-
-@-webkit-keyframes bounce {
-  0%,
-  100% {
-    -webkit-transform: scale(0);
-  }
-
-  50% {
-    -webkit-transform: scale(1);
-  }
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: scale(0);
-    -webkit-transform: scale(0);
-  }
-
-  50% {
-    transform: scale(1);
-    -webkit-transform: scale(1);
-  }
-}
-
 /**** Important class used througout the course ****/
 .hide {
-  display: none !important;
+  display: none;
 }
 
 .photoURL {

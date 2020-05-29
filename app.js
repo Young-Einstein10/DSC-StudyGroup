@@ -1,3 +1,10 @@
+// let userState = false;
+
+// if (!userState) {
+//   document.querySelector("main").style.display = "none";
+//   document.querySelector(".loading").innerHTML =
+//     "LOADING<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>";
+// }
 // Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: "AIzaSyD6-Tn42TFyKyqqkGyRKSBno_X6rpg5n84",
@@ -89,11 +96,42 @@ const addPoststoUI = (posts) => {
   });
 };
 
+const removeTweetsFromUI = (id) => {
+  document.getElementById(id).remove();
+};
+
+const updateTweet = (e) => {};
+
+const deleteTweet = (e) => {
+  // console.log(e.target.getAttribute("delete-id"));
+  const tweet = e.target;
+  const key = e.target.getAttribute("delete-id");
+  // Show Loading Visual
+  articleLoader("show");
+  // Delete fromfirebase
+  database
+    .collection("tweets")
+    .doc(key)
+    .delete()
+    .then(function () {
+      console.log("Document successfully deleted!");
+      // Item is removed from DOM based on its ID
+      removeTweetsFromUI(key);
+      // Remove Loader
+      articleLoader("hide");
+    })
+    .catch(function (error) {
+      console.error("Error removing document: ", error);
+    });
+};
+
 let arr = [];
 
 // Makes your app aware of users
 auth.onAuthStateChanged((user) => {
   if (user) {
+    // Update user State
+    userState = true;
     // Everything inside here happens if user is signed in
     console.log("Uer is Signed In");
     uid = user.uid;
@@ -122,25 +160,74 @@ auth.onAuthStateChanged((user) => {
       console.log(userProfile);
     });
 
-    // Get Data Posted By User from Firebase
-    database.collection("tweets").onSnapshot((snapshot) => {
-      snapshot.forEach((element) => {
-        // console.log(element.id, " => ", element.data());
-        arr.push({
-          id: element.id,
-          ...element.data(),
-        });
-      });
-      console.log(arr);
-    });
+    database.collection("tweets").onSnapshot(function (snapshot) {
+      const postContainer = document.getElementById("posts");
 
-    // Mimic Async Request
-    setTimeout(() => {
-      addPoststoUI(arr);
-    }, 1000);
+      snapshot.docChanges().forEach(function (element) {
+        if (element.type === "added") {
+          console.log(element.doc.id, " => ", element.doc.data());
+          const article = document.createElement("article");
+          article.className = "article";
+          article.id = element.doc.id;
+          article.setAttribute("authorId", element.doc.data().authorId);
+
+          // If user ID equals author ID, show delete and update button
+          const update = uid === element.doc.data().authorId ? "Update" : "";
+          const del = uid === element.doc.data().authorId ? "Delete" : "";
+
+          // Document ID is set as article ID, then set as data-name attribute for Update and Delete Button to make reference easier
+          article.innerHTML = `
+          <p class="article-details">
+            <span>
+              <em>
+                ${element.doc.data().authorFirstname} ${
+            element.doc.data().authorLastname
+          }
+              </em>
+            </span>
+            <span>
+              ${element.doc.data().createdOn.seconds}
+            </span>
+          </p>
+          <h1 className="title">${element.doc.data().title}</h1>
+          <p>
+            ${element.doc.data().body}
+          </p>
+          <p style="display: flex">
+            <button update-id="${
+              element.doc.id
+            }" class="update-tweet-btn">${update}</button>
+            <button delete-id="${
+              element.doc.id
+            }" class="delete-tweet-btn">${del}</button>
+          </p>
+        `;
+          postContainer.appendChild(article);
+        }
+
+        // Access all delete and update buttons then add a click listener to them
+        const updateBtn = document.querySelectorAll("button.update-tweet-btn");
+        const deleteBtn = document.querySelectorAll("button.delete-tweet-btn");
+
+        updateBtn.forEach((button) => (button.onclick = (e) => updateTweet(e)));
+        deleteBtn.forEach((button) => (button.onclick = (e) => deleteTweet(e)));
+
+        // updateBtn.onclick = (e) => updateTweet(e);
+        // deleteBtn.onclick = (e) => deleteTweet(e);
+
+        if (element.type === "modified") {
+          console.log(element.doc.id, " => ", element.doc.data());
+        }
+        if (element.type === "removed") {
+          console.log(element.doc.id, " => ", element.doc.data());
+        }
+      });
+    });
   } else {
     // Everything inside here happens if user is not signed in
     console.log("not signed in");
+
+    userState = null;
 
     // Hides or shows elements depending on if user is signed out
     hideWhenSignedIn.forEach((eachItem) => {
@@ -205,6 +292,19 @@ const loading = (action) => {
     document.getElementById("loading-outer-container").style.display = "block";
   } else if (action === "hide") {
     document.getElementById("loading-outer-container").style.display = "none";
+  } else {
+    console.log("loading error");
+  }
+};
+
+// Function to hide and show article loading visual cue when deleting or updating
+const articleLoader = (action) => {
+  if (action === "show") {
+    document.getElementById("article-modal").style.display = "flex";
+    document.getElementById("article-modal-outer").classList.toggle("hide");
+  } else if (action === "hide") {
+    document.getElementById("article-modal").style.display = "none";
+    document.getElementById("article-modal-outer").classList.toggle("hide");
   } else {
     console.log("loading error");
   }
@@ -326,22 +426,6 @@ forgotPasswordForm.addEventListener("submit", (event) => {
 createPostForm.addEventListener("submit", (event) => {
   event.preventDefault();
   // Send value to Firebase
-  // database
-  //   .collection("tests")
-  //   .doc(uid)
-  //   .collection("user-tests")
-  //   .add({
-  //     title: "First Test",
-  //     body: "Body of Teest",
-  //     createdOn: new Date(),
-  //   })
-  //   .then(function (docRef) {
-  //     console.log("Document written with ID: ", docRef.id);
-  //   })
-  //   .catch(function (error) {
-  //     console.error("Error adding document: ", error);
-  //   });
-
   database
     .collection("tweets")
     .add({

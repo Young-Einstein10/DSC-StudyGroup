@@ -6,6 +6,7 @@
   <title>Mini Twitter</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do">
+  <link rel="stylesheet" href="loader.css">
   <link rel="stylesheet" href="style.css">
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
@@ -14,6 +15,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
 </head>
 <body>
+  <div class="loading"></div>
   <main>
     <!-- Header -->
     <nav id="header">
@@ -35,14 +37,12 @@
       <div class="nav-items hide-when-signed-out">  
         <button class="createPost">Create Post</button>    
         <button class="auth" auth="sign-out">sign out</button>
-        <span class="photoURL"></span>
+        <!-- <span class="photoURL"></span> -->
       </div>
     </nav>
 
-    <!-- Hero Banner -->
-    <div class="hide-when-signed-in">
-
-    </div>
+    <!-- Hero Banner (Landing Page) -->
+    <div class="hide-when-signed-in"></div>
 
     <!-- Dashboard -->
     <section id="dashboard" class="hide-when-signed-out">  
@@ -64,25 +64,7 @@
     
       <div class="latest-posts">
         <h1>Latest Posts</h1>
-        <div id="posts">
-          <!-- <article className="article">
-            <p class="article-details">
-              <span>
-                <em>John Blake</em>
-              </span>
-              <span>
-                May 23, 2020
-              </span>
-            </p>
-            <h1 className="title">Building a REST API With NodeJS</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-              incidunt cum asperiores aperiam. Suscipit voluptates quam ipsa. Quas
-              quaerat ullam nobis suscipit, fugiat adipisci ut rerum, velit
-              dolorum minus modi
-            </p>
-          </article> -->
-        </div>
+        <div id="posts"></div>
       </div>
     </section>
 
@@ -109,7 +91,19 @@
     </footer>
     <!-- Footer -->
 
-    <!-- Modal -->
+    <!-- Article Modal for Update and Delete Features -->
+    <div id="article-modal">
+      <div id="article-modal-outer" class="hide">
+        <div id="article-modal-inner">
+          <div id="loadspin">
+            <div id="circle1"></div>
+            <div id="circle2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authenticaton Modal -->
     <div id="modal">
       <div id="modal-content">
         <button id="close">&times</button>
