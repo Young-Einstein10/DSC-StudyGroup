@@ -91,13 +91,47 @@
     </footer>
     <!-- Footer -->
 
-    <!-- Article Modal for Update and Delete Features -->
+    <!-- Article Loader for Update and Delete Features -->
     <div id="article-modal">
       <div id="article-modal-outer" class="hide">
         <div id="article-modal-inner">
           <div id="loadspin">
             <div id="circle1"></div>
             <div id="circle2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Form Modal -->
+    <div id="update-modal">
+      <div id="update-modal-content">
+        <button id="close-update-modal">&times</button>
+        <!-- FORM  -->
+        <div class="update-post-form">
+          <form id="update-post-form">
+            <h1>Update Post</h1>
+            <label for="update-title">
+              Title:
+              <input type="text" id="update-title" required autocomplete="off">
+            </label>
+          
+            <label for="update-body">
+              Body:
+            </label>
+              <textarea name="body" id="update-body" required></textarea>
+            <button type="submit">Update Post</button>
+          </form>
+        </div>
+
+        <div id="article-modal">
+          <div id="article-modal-outer" class="hide">
+            <div id="article-modal-inner">
+              <div id="loadspin">
+                <div id="circle1"></div>
+                <div id="circle2"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

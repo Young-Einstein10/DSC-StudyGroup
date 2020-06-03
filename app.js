@@ -30,9 +30,13 @@ const createPost = document.querySelector(".createPost");
 
 // Access the modal element
 const modal = document.getElementById("modal");
+const updateModal = document.getElementById("update-modal");
 
 // Access the element that closes the modal
 const close = document.getElementById("close");
+
+// Access the element that closes the modal
+const closeUpdateModal = document.getElementById("close-update-modal");
 
 // Access the forms for email and password authentication
 const createUserForm = document.getElementById("create-user-form");
@@ -50,8 +54,11 @@ const haveOrNeedAccountDialog = document.getElementById(
 const hideWhenSignedIn = document.querySelectorAll(".hide-when-signed-in");
 const hideWhenSignedOut = document.querySelectorAll(".hide-when-signed-out");
 
-// Get the to do list form for item submissions
+// Get the postform for item submissions
 const createPostForm = document.getElementById("create-post-form");
+
+// Get the update form for item submissions
+const updatePostForm = document.getElementById("update-post-form");
 
 // Access the message HTML element
 const authMessage = document.getElementById("message");
@@ -61,6 +68,11 @@ close.addEventListener("click", () => {
   modal.style.display = "none";
 });
 
+// When the user clicks the (x) button close the update modal
+closeUpdateModal.addEventListener("click", () => {
+  closeUpdateForm();
+});
+
 // When the user clicks anywhere outside of the modal close it.
 window.addEventListener("click", (event) => {
   if (event.target == modal) {
@@ -68,39 +80,44 @@ window.addEventListener("click", (event) => {
   }
 });
 
+// When the user clicks anywhere outside of the update modal close it.
+window.addEventListener("click", (event) => {
+  if (event.target == updateModal) {
+    closeUpdateForm();
+  }
+});
+
 let uid;
 let userProfile = {};
 
-const addPoststoUI = (posts) => {
-  const postContainer = document.getElementById("posts");
-  posts.forEach((post) => {
-    const article = document.createElement("article");
-    article.className = "article";
-    article.dataset.name = post.id;
-    article.setAttribute("authorId", post.authorId);
-    article.innerHTML = `
-      <p class="article-details">
-        <span>
-          <em>${post.authorFirstname} ${post.authorLastname}</em>
-        </span>
-        <span>
-          ${post.createdOn.seconds}
-        </span>
-      </p>
-      <h1 className="title">${post.title}</h1>
-      <p>
-        ${post.body}
-      </p>
-    `;
-    postContainer.appendChild(article);
-  });
+const closeUpdateForm = () => (updateModal.style.display = "none");
+
+const showUpdateModal = (articleId) => {
+  updateModal.style.display = "block";
+
+  // Access Title and Body Text Nodes of Current Article
+  const article = document.getElementById(articleId);
+  const articleTitle = article.children[1].textContent;
+  const articleBody = article.children[2].textContent;
+
+  // Set Form Input Values to current text content of article
+  document.getElementById("update-title").value = articleTitle;
+  document.getElementById("update-body").value = articleBody;
+
+  // Set the articleID as a data-property on the form container
+  updatePostForm.dataset.name = articleId;
 };
 
 const removeTweetsFromUI = (id) => {
   document.getElementById(id).remove();
 };
 
-const updateTweet = (e) => {};
+const updateTweet = (e) => {
+  // const tweet = e.target;
+  const key = e.target.getAttribute("update-id");
+
+  showUpdateModal(key);
+};
 
 const deleteTweet = (e) => {
   // console.log(e.target.getAttribute("delete-id"));
@@ -190,7 +207,7 @@ auth.onAuthStateChanged((user) => {
             </span>
           </p>
           <h1 className="title">${element.doc.data().title}</h1>
-          <p>
+          <p class="body">
             ${element.doc.data().body}
           </p>
           <p style="display: flex">
@@ -217,6 +234,48 @@ auth.onAuthStateChanged((user) => {
 
         if (element.type === "modified") {
           console.log(element.doc.id, " => ", element.doc.data());
+
+          // Empty Post Container
+          // postContainer.innerHTML = "";
+
+          // Re-populate UI with Updated Post
+          const article = document.createElement("article");
+          article.className = "article";
+          article.id = element.doc.id;
+          article.setAttribute("authorId", element.doc.data().authorId);
+
+          // If user ID equals author ID, show delete and update button
+          const update = uid === element.doc.data().authorId ? "Update" : "";
+          const del = uid === element.doc.data().authorId ? "Delete" : "";
+
+          // Document ID is set as article ID, then set as data-name attribute for Update and Delete Button to make reference easier
+          article.innerHTML = `
+            <p class="article-details">
+              <span>
+                <em>
+                    ${element.doc.data().authorFirstname} ${
+            element.doc.data().authorLastname
+          }
+                </em>
+              </span>
+              <span>
+                ${element.doc.data().createdOn.seconds}
+              </span>
+            </p>
+            <h1 className="title">${element.doc.data().title}</h1>
+            <p class="body">
+              ${element.doc.data().body}
+            </p>
+            <p style="display: flex">
+              <button update-id="${
+                element.doc.id
+              }" class="update-tweet-btn">${update}</button>
+              <button delete-id="${
+                element.doc.id
+              }" class="delete-tweet-btn">${del}</button>
+            </p>
+          `;
+          postContainer.appendChild(article);
         }
         if (element.type === "removed") {
           console.log(element.doc.id, " => ", element.doc.data());
@@ -471,3 +530,25 @@ function showLatestPosts() {
   latestPosts.style.display = "block";
   addPostForm.style.display = "none";
 }
+
+updatePostForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const key = updatePostForm.dataset.name;
+  // console.log(key);
+
+  const title = document.getElementById("update-title").value;
+  const body = document.getElementById("update-body").value;
+
+  // console.log(title, body);
+
+  database
+    .collection("tweets")
+    .doc(key)
+    .update({
+      title,
+      body,
+    })
+    .then((docRef) => closeUpdateForm())
+    .catch((err) => console.log(err));
+});
