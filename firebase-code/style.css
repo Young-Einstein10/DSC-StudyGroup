@@ -18,42 +18,6 @@ h1 {
   font-family: cursive;
 }
 
-.container {
-  padding-left: 80px;
-  padding-right: 80px;
-  margin: 0 auto;
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  align-items: center;
-}
-
-.col {
-  flex: 0 0 100%;
-  max-width: 100%;
-}
-
-.col-7 {
-  flex: 0 0 58.333333%;
-  max-width: 58.333333%;
-}
-
-.col-5 {
-  flex: 0 0 41.666667%;
-  max-width: 41.666667%;
-}
-
-.banner .col-7 p {
-  width: 70%;
-}
-
-.banner .col-5 img {
-  width: 300px;
-}
-
 div.logo {
   font-family: 'Cedarville Cursive', cursive;
   font-size: 25px;
@@ -63,22 +27,8 @@ button {
   background: #316fea;
 }
 
-/* img {
+img {
   width: 100%;
-} */
-
-.menu-icon {
-  cursor: pointer;
-  position: relative;
-  right: -50%;
-}
-
-
-.menu-icon:hover {
-  background: rgba(73, 70, 70, 0.2);
-  border-radius: 50px;
-  width: 80px;
-  height: 80px;
 }
 
 .auth {
@@ -91,18 +41,9 @@ button {
   color: #fff;
   justify-content: space-between;
   height: 60px;
-  padding-left: 80px;
-  padding-right: 80px;
+  padding-left: 40px;
+  padding-right: 40px;
   background-color: #888888;
-}
-
-.update-tweet-btn {
-  background: green;
-}
-
-.delete-tweet-btn {
-  background: red;
-  margin-left: 20px;
 }
 
 .nav-items {
@@ -118,53 +59,27 @@ button {
   background: none;
 }
 
-.banner {
-  height: calc(100vh - 60px);
-  display: flex;
-  align-items: center;
-}
-
-.banner .col-7 {
-  text-align: justify;
-  line-height: 1.5;
-  font-size: 20px;
-}
+/* .header-buttons-grid {
+  display: grid;
+  grid-gap: 40px;
+  margin-top: 10px;
+} */
 
 #footer {
   display: none;
   background-color: #f9f4f4;
-}
-
-
-@media (min-width: 576px) {
-  .mycontainer {
-    max-width: 540px;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-
-@media (min-width: 768px) {
-  .mycontainer {
-    max-width: 720px;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-
-@media (min-width: 992px) {
-  .mycontainer {
-    max-width: 960px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .mycontainer {
-    max-width: 1140px;
-  }
+  /* padding: 30px 20px 50px 20px; */
 }
 
 @media (min-width: 100px) {
+  /* #header {
+    grid-template-columns: 1fr;
+  }
+
+  .header-buttons-grid {
+    grid-template-columns: 1fr;
+  } */
+
   #footer {
     grid-template-columns: 1fr;
   }

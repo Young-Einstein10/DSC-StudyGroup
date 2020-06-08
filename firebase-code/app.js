@@ -187,18 +187,8 @@ auth.onAuthStateChanged((user) => {
         article.setAttribute("authorId", element.data().authorId);
 
         // If user ID equals author ID, show delete and update button
-        // const update = uid === element.data().authorId ? "Update" : "";
-        // const del = uid === element.data().authorId ? "Delete" : "";
-
-        const articleDetailsBtn =
-          uid === element.data().authorId
-            ? `
-            <p style="display: flex; justify-content: end">
-              <button update-id="${element.id}" class="update-tweet-btn">Update</button>
-              <button delete-id="${element.id}" class="delete-tweet-btn">Delete</button>
-            </p>
-          `
-            : "";
+        const update = uid === element.data().authorId ? "Update" : "";
+        const del = uid === element.data().authorId ? "Delete" : "";
 
         // Document ID is set as article ID, then set as data-name attribute for Update and Delete Button to make reference easier
         article.innerHTML = `
@@ -210,7 +200,6 @@ auth.onAuthStateChanged((user) => {
         }
               </em>
             </span>
-            <span>  ||  </span> 
             <span>
               ${element.data().createdOn.seconds}
             </span>
@@ -219,8 +208,14 @@ auth.onAuthStateChanged((user) => {
           <p class="body">
             ${element.data().body}
           </p>
-
-          ${articleDetailsBtn}
+          <p style="display: flex">
+            <button update-id="${
+              element.id
+            }" class="update-tweet-btn">${update}</button>
+            <button delete-id="${
+              element.id
+            }" class="delete-tweet-btn">${del}</button>
+          </p>
         `;
         postContainer.appendChild(article);
       });
@@ -240,18 +235,8 @@ auth.onAuthStateChanged((user) => {
           article.setAttribute("authorId", element.doc.data().authorId);
 
           // If user ID equals author ID, show delete and update button
-          // const update = uid === element.doc.data().authorId ? "Update" : "";
-          // const del = uid === element.doc.data().authorId ? "Delete" : "";
-
-          const articleDetailsBtn =
-            uid === element.data().authorId
-              ? `
-            <p style="display: flex; justify-content: end">
-              <button update-id="${element.id}" class="update-tweet-btn">Update</button>
-              <button delete-id="${element.id}" class="delete-tweet-btn">Delete</button>
-            </p>
-          `
-              : "";
+          const update = uid === element.doc.data().authorId ? "Update" : "";
+          const del = uid === element.doc.data().authorId ? "Delete" : "";
 
           // Document ID is set as article ID, then set as data-name attribute for Update and Delete Button to make reference easier
           article.innerHTML = `
@@ -263,7 +248,7 @@ auth.onAuthStateChanged((user) => {
           }
                 </em>
               </span>
-              <span>  ||  </span>  
+               || 
               <span>
                 ${element.doc.data().createdOn.seconds}
               </span>
@@ -272,7 +257,14 @@ auth.onAuthStateChanged((user) => {
             <p class="body">
               ${element.doc.data().body}
             </p>
-            ${articleDetailsBtn}
+            <p style="display: flex">
+              <button update-id="${
+                element.doc.id
+              }" class="update-tweet-btn">${update}</button>
+              <button delete-id="${
+                element.doc.id
+              }" class="delete-tweet-btn">${del}</button>
+            </p>
           `;
           postContainer.insertBefore(article, postContainer.childNodes[0]);
         }
@@ -297,18 +289,8 @@ auth.onAuthStateChanged((user) => {
           article.setAttribute("authorId", element.doc.data().authorId);
 
           // If user ID equals author ID, show delete and update button
-          // const update = uid === element.doc.data().authorId ? "Update" : "";
-          // const del = uid === element.doc.data().authorId ? "Delete" : "";
-
-          const articleDetailsBtn =
-            uid === element.data().authorId
-              ? `
-            <p style="display: flex; justify-content: end">
-              <button update-id="${element.id}" class="update-tweet-btn">Update</button>
-              <button delete-id="${element.id}" class="delete-tweet-btn">Delete</button>
-            </p>
-          `
-              : "";
+          const update = uid === element.doc.data().authorId ? "Update" : "";
+          const del = uid === element.doc.data().authorId ? "Delete" : "";
 
           // Document ID is set as article ID, then set as data-name attribute for Update and Delete Button to make reference easier
           article.innerHTML = `
@@ -320,7 +302,7 @@ auth.onAuthStateChanged((user) => {
           }
                 </em>
               </span>
-              <span>  ||  </span> 
+               || 
               <span>
                 ${element.doc.data().createdOn.seconds}
               </span>
@@ -329,7 +311,14 @@ auth.onAuthStateChanged((user) => {
             <p class="body">
               ${element.doc.data().body}
             </p>
-            ${articleDetailsBtn}
+            <p style="display: flex">
+              <button update-id="${
+                element.doc.id
+              }" class="update-tweet-btn">${update}</button>
+              <button delete-id="${
+                element.doc.id
+              }" class="delete-tweet-btn">${del}</button>
+            </p>
           `;
           postContainer.insertBefore(article, postContainer.childNodes[0]);
         }

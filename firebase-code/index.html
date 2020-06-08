@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js"></script>
 </head>
+
 <body>
   <div class="loading"></div>
   <main>
@@ -34,30 +36,18 @@
         </div>
       </div>
 
-      <div class="nav-items hide-when-signed-out hide">  
-        <button class="createPost">Create Post</button>    
+      <div class="nav-items hide-when-signed-out hide">
+        <button class="createPost">Create Post</button>
         <button class="auth" auth="sign-out">Sign Out</button>
         <!-- <span class="photoURL"></span> -->
       </div>
     </nav>
 
     <!-- Hero Banner (Landing Page) -->
-    <div class="hide-when-signed-in banner">
-      <div class="container">
-        <div class="row">
-          <div class="col-7"><p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quis nobis exercitationem minus, facilis error nisi quo!
-            Consequatur possimus officia totam et aperiam ducimus quia repellendus enim nisi? Dolores, velit?
-          </p></div>
-          <div class="col-5">
-            <img src="./thinking.svg" alt="Thinking Man">
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="hide-when-signed-in"></div>
 
     <!-- Dashboard -->
-    <section id="dashboard" class="hide-when-signed-out">  
+    <section id="dashboard" class="hide-when-signed-out">
       <div class="add-post-form">
         <form id="create-post-form">
           <h1>New Post</h1>
@@ -67,13 +57,13 @@
           </label>
 
           <label for="body">
-            Body: 
-            <input type="text" id="body" required autocomplete="off">  
+            Body:
+            <input type="text" id="body" required autocomplete="off">
           </label>
           <button type="submit">Create Post</button>
         </form>
       </div>
-    
+
       <div class="latest-posts hide-when-signed-out hide">
         <h1>Latest Posts</h1>
         <div id="posts"></div>
@@ -84,20 +74,20 @@
     <footer id="footer">
       <div>
         <p>
-          <h3>About</h3>
-          <i>Expertly Authenticate Users</i>
+        <h3>About</h3>
+        <i>Expertly Authenticate Users</i>
         </p>
       </div>
       <div>
         <p>
-          <h3>Firebase</h3>
-          <i>Authentication, Hosting, Database, Storage</i>
+        <h3>Firebase</h3>
+        <i>Authentication, Hosting, Database, Storage</i>
         </p>
       </div>
       <div>
         <p>
-          <h3>Language</h3>
-          <i>JavaScript (JS) ECMAScript (ES)</i>
+        <h3>Language</h3>
+        <i>JavaScript (JS) ECMAScript (ES)</i>
         </p>
       </div>
     </footer>
@@ -127,11 +117,11 @@
               Title:
               <input type="text" id="update-title" required autocomplete="off">
             </label>
-          
+
             <label for="update-body">
               Body:
             </label>
-              <textarea name="body" id="update-body" required></textarea>
+            <textarea name="body" id="update-body" required></textarea>
             <button type="submit">Update Post</button>
           </form>
         </div>
@@ -166,18 +156,18 @@
             </div>
             <button id="create-user-button" class="purple-button" type="submit">Create User</button>
           </form>
-          
+
           <!-- Sign in form -->
           <form id="sign-in-form">
             <div id="sign-in-inputs">
               <input type="email" id="sign-in-email" placeholder="Email" required autocomplete="off">
               <input type="password" id="sign-in-password" placeholder="Password" required autocomplete="off">
             </div>
-          
+
             <div id="forgot-password-link" class="auth" auth="show-forgot-password-form">Forgot?</div>
             <button id="sign-in-button" class="purple-button" type="submit">Sign In</button>
           </form>
-          
+
           <!-- Forgot password form form -->
           <form id="forgot-password-form">
             <div id="forgot-password-inputs">
@@ -221,4 +211,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
